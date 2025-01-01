@@ -1,87 +1,67 @@
-import React, {useState } from "react";
+import React, { useState } from 'react';
 
 const RegistrationForm = () => {
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: '',
-    });
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
 
-    comst [errors, setErrors] = useState({});
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = {};
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
+    if (!username) newErrors.username = 'Username is required';
+    if (!email) newErrors.email = 'Email is required';
+    if (!password) newErrors.password = 'Password is required';
 
-    const validate = () => {
-        const newErrors = {};
-        if (! formData.username.trim()) newErrors.username = 'Username is required';
-        if (!formData.email.trim()) newErrors.email = 'Email is required';
-        if (!formData.password.trim()) newErrors.password = 'Password is required';
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+    setErrors(newErrors);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (validate()) {
-            console.log('Form submitted:', formData);
-            alert('Registration successful!');
-            setFormData({ username: '', email: '', password: ''});
-        }
-    };
-    
-    return (
-        <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: 'auto' }}>
-            <h2>Register</h2>
+    if (Object.keys(newErrors).length === 0) {
+      // Simulate API call
+      console.log({ username, email, password });
+      alert("Form submitted successfully (check console)");
+      // Reset form
+      setUsername('');
+      setEmail('');
+      setPassword('');
+    }
+  };
 
-            <div style={{ marginBottom: '1rem' }}>
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    style={{ display:'block', width: '100%' }}
-                />
-                {errors.username && <small style={{ color: 'red' }}>{errors.username}</small>}
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-                <label htmlFor="email">Email:</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    style={{ display: 'block', width: '100%' }}
-                />
-                {errors.email && <small style={{ color: 'red' }}>{errors.email}</small>}
-            </div>
-
-            <div style={{ marginBottom: '1rem' }}>
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    style={{ display: 'block', width: '100%' }}
-                />
-                {errors.password && <small style={{ color: 'red' }}>{errors.password}</small>}
-            </div>
-
-            <button type="submit" style={{ padding: '0.5rem 1rem' }}>
-                Register
-            </button>
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={username} // Corrected: Added value attribute
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
+      </div>
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          value={email} // Corrected: Added value attribute
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+      </div>
+      <div>
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          value={password} // Corrected: Added value attribute
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+      </div>
+      <button type="submit">Register</button>
+    </form>
+  );
 };
 
 export default RegistrationForm;
