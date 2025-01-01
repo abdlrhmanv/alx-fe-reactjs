@@ -1,79 +1,86 @@
-// src/components/formikForm.js
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React, {useState } from "react";
 
 const RegistrationForm = () => {
-    // Validation schema using Yup
-    const validationSchema = Yup.object({
-        username: Yup.string().required('Username is required'),
-        email: Yup.string().email('Invalid email format').required('Email is required'),
-        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
-    });
-
-    // Initial form values
-    const initialValues = {
+    const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
+    });
+
+    comst [errors, setErrors] = useState({});
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
 
-    // Handle form submission
-    const onSubmit = (values, { resetForm }) => {
-        console.log('Form submitted:', values);
-        alert('Registration successful!');
-        resetForm();
+    const validate = () => {
+        const newErrors = {};
+        if (! formData.username.trim()) newErrors.username = 'Username is required';
+        if (!formData.email.trim()) newErrors.email = 'Email is required';
+        if (!formData.password.trim()) newErrors.password = 'Password is required';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (validate()) {
+            console.log('Form submitted:', formData);
+            alert('Registration successful!');
+            setFormData({ username: '', email: '', password: ''});
+        }
+    };
+    
     return (
-        <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-        >
-            {({ isSubmitting }) => (
-                <Form style={{ maxWidth: '400px', margin: 'auto' }}>
-                    <h2>Register</h2>
+        <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: 'auto' }}>
+            <h2>Register</h2>
 
-                    <div style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="username">Username:</label>
-                        <Field
-                            type="text"
-                            id="username"
-                            name="username"
-                            style={{ display: 'block', width: '100%' }}
-                        />
-                        <ErrorMessage name="username" component="small" style={{ color: 'red' }} />
-                    </div>
+            <div style={{ marginBottom: '1rem' }}>
+                <label htmlFor="username">Username:</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    style={{ display:'block', width: '100%' }}
+                />
+                {errors.username && <small style={{ color: 'red' }}>{errors.username}</small>}
+            </div>
+            <div style={{ marginBottom: '1rem' }}>
+                <label htmlFor="email">Email:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    style={{ display: 'block', width: '100%' }}
+                />
+                {errors.email && <small style={{ color: 'red' }}>{errors.email}</small>}
+            </div>
 
-                    <div style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="email">Email:</label>
-                        <Field
-                            type="email"
-                            id="email"
-                            name="email"
-                            style={{ display: 'block', width: '100%' }}
-                        />
-                        <ErrorMessage name="email" component="small" style={{ color: 'red' }} />
-                    </div>
+            <div style={{ marginBottom: '1rem' }}>
+                <label htmlFor="password">Password:</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    style={{ display: 'block', width: '100%' }}
+                />
+                {errors.password && <small style={{ color: 'red' }}>{errors.password}</small>}
+            </div>
 
-                    <div style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="password">Password:</label>
-                        <Field
-                            type="password"
-                            id="password"
-                            name="password"
-                            style={{ display: 'block', width: '100%' }}
-                        />
-                        <ErrorMessage name="password" component="small" style={{ color: 'red' }} />
-                    </div>
-
-                    <button type="submit" disabled={isSubmitting} style={{ padding: '0.5rem 1rem' }}>
-                        {isSubmitting ? 'Submitting...' : 'Register'}
-                    </button>
-                </Form>
-            )}
-        </Formik>
+            <button type="submit" style={{ padding: '0.5rem 1rem' }}>
+                Register
+            </button>
+        </form>
     );
 };
 
