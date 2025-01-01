@@ -7,8 +7,8 @@ const EditRecipeForm = ({ recipe }) => {
   const [description, setDescription] = useState(recipe.description);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    updateRecipe({ ...recipe, title, description });
+    e.preventDefault(); // Prevents the default form submission behavior
+    updateRecipe({ ...recipe, title, description }); // Updates the recipe in the store
   };
 
   return (
@@ -28,7 +28,16 @@ const EditRecipeForm = ({ recipe }) => {
         required
         style={{ display: 'block', margin: '10px 0', padding: '5px', width: '100%' }}
       />
-      <button type="submit" style={{ padding: '10px', backgroundColor: '#28a745', color: '#fff', border: 'none' }}>
+      <button
+        type="submit"
+        style={{
+          padding: '10px',
+          backgroundColor: '#28a745',
+          color: '#fff',
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
         Save Changes
       </button>
     </form>
