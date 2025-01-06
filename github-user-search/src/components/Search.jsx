@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchAdvancedUserData } from "../services/githubService";
+import { fetchUserData, fetchAdvancedUserData } from "../services/githubService";
 
 const Search = () => {
   const [username, setUsername] = useState("");
@@ -15,8 +15,15 @@ const Search = () => {
     setError("");
 
     try {
-      const users = await fetchAdvancedUserData({ username, location, minRepos: parseInt(minRepos) || 0 });
-      setResults(users);
+      let data;
+      if (location || minRepos) {
+        // Use advanced search
+        data = await fetchAdvancedUserData({ username, location, minRepos: parseInt(minRepos) || 0 });
+      } else {
+        // Use basic search
+        data = [await fetchUserData(username)]; // Wrap in an array for consistency
+      }
+      setResults(data);
     } catch (err) {
       setError("An error occurred while fetching data. Please try again.");
     } finally {
