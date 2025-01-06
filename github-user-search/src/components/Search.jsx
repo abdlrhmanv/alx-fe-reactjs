@@ -19,7 +19,11 @@ const Search = () => {
 
     try {
       const data = await fetchUserData(username);
-      setUserData(data);
+      if (data && data.login) {
+        setUserData(data);
+      } else {
+        throw new Error("User not found");
+      }
     } catch (err) {
       setError("Looks like we can't find the user");
     } finally {
@@ -51,10 +55,10 @@ const Search = () => {
         <div className="mt-4 text-center">
           <img
             src={userData.avatar_url}
-            alt={userData.name}
+            alt={userData.login}
             className="w-24 h-24 rounded-full mx-auto"
           />
-          <h2 className="text-xl font-bold mt-2">{userData.name || "No Name Available"}</h2>
+          <h2 className="text-xl font-bold mt-2">{userData.name || userData.login}</h2>
           <a
             href={userData.html_url}
             target="_blank"
