@@ -4,15 +4,15 @@ function AddRecipeForm() {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [steps, setSteps] = useState("");
-  const [errors, setErrors] = useState({}); // Error state
+  const [errors, setErrors] = useState({});
 
   const validate = () => {
     const validationErrors = {};
-    if (!title) validationErrors.title = "Recipe title is required.";
-    if (!ingredients) validationErrors.ingredients = "Ingredients are required.";
-    if (!steps) validationErrors.steps = "Preparation steps are required.";
+    if (!title.trim()) validationErrors.title = "Recipe title is required.";
+    if (!ingredients.trim()) validationErrors.ingredients = "Ingredients are required.";
+    if (!steps.trim()) validationErrors.steps = "Preparation steps are required.";
     if (ingredients.split(",").length < 2) {
-      validationErrors.ingredients = "Please include at least two ingredients (separated by commas).";
+      validationErrors.ingredients = "Please include at least two ingredients.";
     }
     return validationErrors;
   };
@@ -25,19 +25,17 @@ function AddRecipeForm() {
       return;
     }
     setErrors({});
-    console.log({ title, ingredients, steps });
+    console.log("Recipe submitted:", { title, ingredients, steps });
     alert("Recipe submitted successfully!");
-    // Clear form
     setTitle("");
     setIngredients("");
     setSteps("");
   };
 
   return (
-    <div className="p-8 max-w-lg mx-auto bg-gray-100 rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Add Recipe</h1>
+    <div className="p-4 md:p-8 max-w-md md:max-w-lg mx-auto bg-gray-100 rounded shadow">
+      <h1 className="text-lg md:text-2xl font-bold mb-4">Add Recipe</h1>
       <form onSubmit={handleSubmit}>
-        {/* Recipe Title */}
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">Recipe Title</label>
           <input
@@ -53,7 +51,6 @@ function AddRecipeForm() {
           )}
         </div>
 
-        {/* Ingredients */}
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">Ingredients (comma-separated)</label>
           <textarea
@@ -68,7 +65,6 @@ function AddRecipeForm() {
           )}
         </div>
 
-        {/* Preparation Steps */}
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">Preparation Steps</label>
           <textarea
@@ -83,7 +79,6 @@ function AddRecipeForm() {
           )}
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
