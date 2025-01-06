@@ -5,7 +5,7 @@ const Search = () => {
   const [username, setUsername] = useState("");
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     setUsername(e.target.value);
@@ -14,7 +14,7 @@ const Search = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setError("");
     setUserData(null);
 
     try {
@@ -25,7 +25,7 @@ const Search = () => {
         throw new Error("User not found");
       }
     } catch (err) {
-      setError("Looks like we can't find the user");
+      setError("Looks like we cant find the user");
     } finally {
       setLoading(false);
     }
